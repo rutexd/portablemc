@@ -11,6 +11,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * This installation procedure can call JOptionPane.showMessageDialog, we check some
@@ -21,9 +22,14 @@ public class V1InstallRunner extends InstallRunner {
 	
 	@Override
 	public String validate(File mainDir) {
+		System.out.println("mainDir: " + mainDir);
 		if (!mainDir.isDirectory()) return "no main dir";
 		File versionRootDir = new File(mainDir, "versions");
-		File minecraftJarFile = VersionInfo.getMinecraftFile(versionRootDir);
+		String vrs = VersionInfo.getMinecraftVersion();
+		String s = Paths.get(versionRootDir.getAbsolutePath(), vrs, vrs + ".jar").toString();
+		File minecraftJarFile = new File(s);
+		
+		// File minecraftJarFile = VersionInfo.getMinecraftFile(versionRootDir);
 		return minecraftJarFile != null && minecraftJarFile.isFile() ? null : "no version jar file";
 	}
 	
@@ -35,7 +41,6 @@ public class V1InstallRunner extends InstallRunner {
 		ServerInstall.headless = true;  // Used by the buildMonitor method to return a wrapper around System.out
 		
 		String oldVersionId = versionId;
-		
 		// Changing version id is quite complicated in this version because we need to change the internal
 		// JSON data through argo JDOM library which is an immutable one.
 		JsonRootNode installProfile = VersionInfo.INSTANCE.versionData;

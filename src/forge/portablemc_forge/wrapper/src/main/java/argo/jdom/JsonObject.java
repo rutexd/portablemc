@@ -13,5 +13,10 @@ final class JsonObject extends AbstractJsonObject {
 	public List<JsonField> getFieldList() {
 		return null;
 	}
+
+	@Override
+	public String getStringValue(String... var1) {
+		return null;
+	}
 	
 }
